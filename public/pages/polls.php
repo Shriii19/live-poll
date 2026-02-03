@@ -127,7 +127,7 @@ $user = getCurrentUser();
         }
 
         function loadPolls() {
-            $.get('/api/polls', function(response) {
+            $.get('/api/polls.php', function(response) {
                 if (response.success) {
                     renderPollsList(response.polls);
                 }
@@ -161,7 +161,7 @@ $user = getCurrentUser();
             $('#polls-list .list-group-item').removeClass('active');
             $(`#polls-list [data-poll-id="${pollId}"]`).addClass('active');
 
-            $.get(`/api/polls/${pollId}`, function(response) {
+            $.get(`/api/polls.php?id=${pollId}&action=get`, function(response) {
                 if (response.success) {
                     renderPollDetail(response.poll, response.has_voted, response.voted_option);
                     startResultsPolling();
@@ -217,7 +217,7 @@ $user = getCurrentUser();
             $btn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin me-2"></i>Voting...');
 
             $.ajax({
-                url: '/api/vote',
+                url: '/api/vote.php',
                 method: 'POST',
                 data: { poll_id: currentPollId, option_id: selectedOptionId },
                 success: function(response) {
@@ -235,7 +235,7 @@ $user = getCurrentUser();
         });
 
         function loadResults(pollId) {
-            $.get(`/api/polls/${pollId}/results`, function(response) {
+            $.get(`/api/polls.php?id=${pollId}&action=results`, function(response) {
                 if (response.success) {
                     renderResults(response.results, response.total_votes);
                 }

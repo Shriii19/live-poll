@@ -5,8 +5,8 @@
 @section('content')
 <div class="row">
     <div class="col-lg-4 mb-4">
-        <div class="card">
-            <div class="card-header bg-primary text-white">
+        <div class="card" style="animation: fadeIn 0.5s ease;">
+            <div class="card-header">
                 <i class="fas fa-list me-2"></i>Active Polls
             </div>
             <div class="card-body p-0">
@@ -20,8 +20,8 @@
     </div>
 
     <div class="col-lg-8">
-        <div id="poll-detail" class="card" style="display: none;">
-            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+        <div id="poll-detail" class="card" style="display: none; animation: fadeIn 0.5s ease;">
+            <div class="card-header d-flex justify-content-between align-items-center">
                 <span><i class="fas fa-poll me-2"></i><span id="poll-question"></span></span>
                 <span class="badge bg-light text-primary" id="total-votes">0 votes</span>
             </div>
@@ -46,9 +46,10 @@
             </div>
         </div>
 
-        <div id="no-poll-selected" class="text-center py-5">
-            <i class="fas fa-hand-pointer fa-4x text-muted mb-3"></i>
-            <h5 class="text-muted">Select a poll from the list to view and vote</h5>
+        <div id="no-poll-selected" class="text-center py-5" style="animation: fadeIn 0.5s ease;">
+            <i class="fas fa-hand-pointer fa-4x mb-3" style="color: #667eea; opacity: 0.7;"></i>
+            <h5 style="color: #667eea;">Select a poll from the list to view and vote</h5>
+            <p class="text-muted">Choose from the active polls on the left</p>
         </div>
     </div>
 </div>

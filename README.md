@@ -40,7 +40,7 @@ define('DB_PASS', '');
 Then run the setup script:
 
 ```bash
-cd C:\Users\mudab\Desktop\live-poll
+cd live-poll
 php setup_database.php
 ```
 

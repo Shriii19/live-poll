@@ -4,9 +4,11 @@
 
 @section('content')
 <div class="row">
-    <div class="col-12 mb-4">
+    <div class="col-12 mb-4" style="animation: fadeIn 0.5s ease;">
         <div class="d-flex justify-content-between align-items-center">
-            <h3><i class="fas fa-tachometer-alt me-2"></i>Admin Dashboard</h3>
+            <h3 style="background: var(--primary-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
+                <i class="fas fa-tachometer-alt me-2" style="-webkit-text-fill-color: #667eea;"></i>Admin Dashboard
+            </h3>
             <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#createPollModal">
                 <i class="fas fa-plus me-2"></i>Create Poll
             </button>
@@ -16,8 +18,8 @@
 
 <div class="row">
     <div class="col-lg-4 mb-4">
-        <div class="card">
-            <div class="card-header bg-dark text-white">
+        <div class="card" style="animation: fadeIn 0.5s ease;">
+            <div class="card-header" style="background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%) !important;">
                 <i class="fas fa-list me-2"></i>All Polls
             </div>
             <div class="card-body p-0">
@@ -31,8 +33,8 @@
     </div>
 
     <div class="col-lg-8">
-        <div id="poll-voters-panel" class="card" style="display: none;">
-            <div class="card-header bg-dark text-white">
+        <div id="poll-voters-panel" class="card" style="display: none; animation: fadeIn 0.5s ease;">
+            <div class="card-header" style="background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%) !important;">
                 <i class="fas fa-users me-2"></i>Voters for: <span id="admin-poll-question"></span>
             </div>
             <div class="card-body">
@@ -44,9 +46,10 @@
             </div>
         </div>
 
-        <div id="no-poll-selected-admin" class="text-center py-5">
-            <i class="fas fa-hand-pointer fa-4x text-muted mb-3"></i>
-            <h5 class="text-muted">Select a poll to manage voters</h5>
+        <div id="no-poll-selected-admin" class="text-center py-5" style="animation: fadeIn 0.5s ease;">
+            <i class="fas fa-hand-pointer fa-4x mb-3" style="color: #2c3e50; opacity: 0.7;"></i>
+            <h5 style="color: #2c3e50;">Select a poll to manage voters</h5>
+            <p class="text-muted">Choose a poll to view voter statistics and history</p>
         </div>
     </div>
 </div>

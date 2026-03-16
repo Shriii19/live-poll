@@ -48,14 +48,14 @@ if (preg_match('#^GET:/api/polls/(\d+)$#', $routeKey, $matches)) {
     exit;
 }
 
-if (preg_match('#^GET:/api/polls/(\d+)/results$#', $uri, $matches)) {
+if (preg_match('#^GET:/api/polls/(\d+)/results$#', $routeKey, $matches)) {
     $_GET['id'] = $matches[1];
     $_GET['action'] = 'results';
     require __DIR__ . '/api/polls.php';
     exit;
 }
 
-if (preg_match('#^POST:/api/polls/(\d+)/toggle$#', $uri, $matches)) {
+if (preg_match('#^POST:/api/polls/(\d+)/toggle$#', $routeKey, $matches)) {
     $_POST['id'] = $matches[1];
     $_POST['action'] = 'toggle';
     require __DIR__ . '/api/polls.php';

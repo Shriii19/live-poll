@@ -111,10 +111,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'toggl
         jsonResponse(['success' => false, 'message' => 'Admin access is required for this action.'], 403);
     }
     
-    $id = $_POST['id'];
+    $id = $_POST['id'] ?? null;
+    if (!$id) {
+        jsonResponse(['success' => false, 'message' => 'Poll ID is required.'], 400);
+    }
     
     $stmt = $pdo->prepare("UPDATE polls SET status = IF(status = 'active', 'inactive', 'active'), updated_at = NOW() WHERE id = ?");
-    $stmt->execute([$id]);
+    $stmt->execute([(int)$id]);
     
     jsonResponse(['success' => true, 'message' => 'Poll status updated successfully.']);
 }

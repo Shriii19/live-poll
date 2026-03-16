@@ -86,10 +86,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && $action === 'voters-history') {
 
 // GET /api/admin/polls/{id}/history/{ip} - Get vote history for specific IP
 if ($_SERVER['REQUEST_METHOD'] === 'GET' && $action === 'history') {
-    $pollId = $_GET['poll_id'];
-    $ip = urldecode($_GET['ip']);
+    $pollId = $_GET['poll_id'] ?? null;
+    $ip = isset($_GET['ip']) ? urldecode($_GET['ip']) : '';
+    if (!$pollId || $ip === '') {
+        jsonResponse(['success' => false, 'message' => 'Poll ID and IP are required.'], 400);
+    }
     
-    $history = $engine->getVoteHistory($pollId, $ip);
+    $history = $engine->getVoteHistory((int)$pollId, $ip);
     jsonResponse(['success' => true, 'history' => $history]);
 }
 

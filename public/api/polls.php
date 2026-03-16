@@ -85,20 +85,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && empty($_POST['action'])) {
     
     $question = $_POST['question'] ?? '';
     $options = $_POST['options'] ?? [];
+    $cleanOptions = array_values(array_filter(array_map('trim', (array)$options), function ($option) {
+        return $option !== '';
+    }));
     
-    if (empty($question) || count($options) < 2) {
+    if (empty(trim($question)) || count($cleanOptions) < 2) {
         jsonResponse(['success' => false, 'message' => 'Please provide a question and at least two options.'], 400);
     }
     
     $stmt = $pdo->prepare("INSERT INTO polls (question, status, created_at, updated_at) VALUES (?, 'active', NOW(), NOW())");
-    $stmt->execute([$question]);
+    $stmt->execute([trim($question)]);
     $pollId = $pdo->lastInsertId();
     
-    foreach ($options as $optionText) {
-        if (!empty(trim($optionText))) {
-            $stmt = $pdo->prepare("INSERT INTO poll_options (poll_id, option_text, created_at, updated_at) VALUES (?, ?, NOW(), NOW())");
-            $stmt->execute([$pollId, trim($optionText)]);
-        }
+    foreach ($cleanOptions as $optionText) {
+        $stmt = $pdo->prepare("INSERT INTO poll_options (poll_id, option_text, created_at, updated_at) VALUES (?, ?, NOW(), NOW())");
+        $stmt->execute([$pollId, $optionText]);
     }
     
     jsonResponse(['success' => true, 'message' => 'Your poll is ready and live!', 'poll_id' => $pollId]);

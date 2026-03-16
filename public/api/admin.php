@@ -38,11 +38,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && empty($action)) {
 
 // GET /api/admin/polls/{id}/voters
 if ($_SERVER['REQUEST_METHOD'] === 'GET' && $action === 'voters') {
-    $pollId = $_GET['poll_id'];
-    $voters = $engine->getPollVoters($pollId);
+    $pollId = $_GET['poll_id'] ?? null;
+    if (!$pollId) {
+        jsonResponse(['success' => false, 'message' => 'Poll ID is required.'], 400);
+    }
+    $voters = $engine->getPollVoters((int)$pollId);
     
     $stmt = $pdo->prepare("SELECT * FROM polls WHERE id = ?");
-    $stmt->execute([$pollId]);
+    $stmt->execute([(int)$pollId]);
     $poll = $stmt->fetch();
     
     jsonResponse(['success' => true, 'poll' => $poll, 'voters' => $voters]);

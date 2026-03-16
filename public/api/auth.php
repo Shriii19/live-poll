@@ -8,6 +8,10 @@ $action = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH) ?? '';
 
 // Handle logout
 if (strpos($action, '/logout') !== false) {
+    $_SESSION = [];
+    if (session_status() === PHP_SESSION_ACTIVE) {
+        session_regenerate_id(true);
+    }
     session_destroy();
     header('Location: /login');
     exit;

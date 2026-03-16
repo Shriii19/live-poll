@@ -10,7 +10,9 @@ define('DB_USER', 'root');
 define('DB_PASS', '');
 
 // Session configuration
-session_start();
+if (session_status() !== PHP_SESSION_ACTIVE) {
+    session_start();
+}
 
 // Database connection
 function getDB(): PDO {

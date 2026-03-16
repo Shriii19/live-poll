@@ -62,21 +62,21 @@ if (preg_match('#^POST:/api/polls/(\d+)/toggle$#', $routeKey, $matches)) {
     exit;
 }
 
-if (preg_match('#^GET:/api/admin/polls/(\d+)/voters$#', $uri, $matches)) {
+if (preg_match('#^GET:/api/admin/polls/(\d+)/voters$#', $routeKey, $matches)) {
     $_GET['poll_id'] = $matches[1];
     $_GET['action'] = 'voters';
     require __DIR__ . '/api/admin.php';
     exit;
 }
 
-if (preg_match('#^GET:/api/admin/polls/(\d+)/voters-history$#', $uri, $matches)) {
+if (preg_match('#^GET:/api/admin/polls/(\d+)/voters-history$#', $routeKey, $matches)) {
     $_GET['poll_id'] = $matches[1];
     $_GET['action'] = 'voters-history';
     require __DIR__ . '/api/admin.php';
     exit;
 }
 
-if (preg_match('#^GET:/api/admin/polls/(\d+)/history/(.+)$#', $uri, $matches)) {
+if (preg_match('#^GET:/api/admin/polls/(\d+)/history/(.+)$#', $routeKey, $matches)) {
     $_GET['poll_id'] = $matches[1];
     $_GET['ip'] = $matches[2];
     $_GET['action'] = 'history';

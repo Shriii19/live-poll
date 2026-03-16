@@ -41,7 +41,7 @@ if (isset($routes[$routeKey])) {
 }
 
 // Check for pattern matches (API routes with IDs)
-if (preg_match('#^GET:/api/polls/(\d+)$#', $uri, $matches)) {
+if (preg_match('#^GET:/api/polls/(\d+)$#', $routeKey, $matches)) {
     $_GET['id'] = $matches[1];
     $_GET['action'] = 'get';
     require __DIR__ . '/api/polls.php';

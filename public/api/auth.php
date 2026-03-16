@@ -4,7 +4,7 @@
  */
 require_once __DIR__ . '/../../config.php';
 
-$action = $_SERVER['REQUEST_URI'];
+$action = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH) ?? '';
 
 // Handle logout
 if (strpos($action, '/logout') !== false) {

@@ -28,7 +28,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && empty($action)) {
 
 // GET /api/polls/{id} - Get single poll
 if ($_SERVER['REQUEST_METHOD'] === 'GET' && $action === 'get') {
-    $id = $_GET['id'];
+    $id = $_GET['id'] ?? null;
+    if (!$id) {
+        jsonResponse(['success' => false, 'message' => 'Poll ID is required.'], 400);
+    }
     
     $stmt = $pdo->prepare("SELECT * FROM polls WHERE id = ?");
     $stmt->execute([$id]);
@@ -45,8 +48,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && $action === 'get') {
     // Check if user has voted
     $engine = new \App\CorePHP\VotingEngine($pdo);
     $clientIP = getClientIP();
-    $hasVoted = $engine->hasVoted($id, $clientIP);
-    $existingVote = $hasVoted ? $engine->getExistingVote($id, $clientIP) : null;
+    $hasVoted = $engine->hasVoted((int)$id, $clientIP);
+    $existingVote = $hasVoted ? $engine->getExistingVote((int)$id, $clientIP) : null;
     
     jsonResponse([
         'success' => true,

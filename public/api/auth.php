@@ -50,3 +50,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         jsonResponse(['success' => false, 'message' => 'Something went wrong on our side. Please try again.'], 500);
     }
 }
+
+jsonResponse(['success' => false, 'message' => 'This endpoint only accepts authentication requests via POST.'], 405);

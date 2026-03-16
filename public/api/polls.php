@@ -61,11 +61,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && $action === 'get') {
 
 // GET /api/polls/{id}/results - Get poll results
 if ($_SERVER['REQUEST_METHOD'] === 'GET' && $action === 'results') {
-    $id = $_GET['id'];
+    $id = $_GET['id'] ?? null;
+    if (!$id) {
+        jsonResponse(['success' => false, 'message' => 'Poll ID is required.'], 400);
+    }
     
     $engine = new \App\CorePHP\VotingEngine($pdo);
-    $results = $engine->getPollResults($id);
-    $totalVotes = $engine->getTotalVotes($id);
+    $results = $engine->getPollResults((int)$id);
+    $totalVotes = $engine->getTotalVotes((int)$id);
     
     jsonResponse([
         'success' => true,

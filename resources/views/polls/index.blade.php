@@ -402,9 +402,32 @@
         }, 1000);
     }
 
+    function stopResultsPolling() {
+        if (resultsInterval) {
+            clearInterval(resultsInterval);
+            resultsInterval = null;
+        }
+    }
+
     // Initialize
     $(document).ready(function() {
         loadPolls();
+
+        document.addEventListener('visibilitychange', function() {
+            if (document.hidden) {
+                stopResultsPolling();
+                return;
+            }
+
+            if (currentPollId) {
+                startResultsPolling();
+                loadResults(currentPollId);
+            }
+        });
+
+        window.addEventListener('beforeunload', function() {
+            stopResultsPolling();
+        });
         
         // Refresh polls list every 10 seconds
         setInterval(loadPolls, 10000);

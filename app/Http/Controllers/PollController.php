@@ -61,9 +61,20 @@ class PollController extends Controller
     public function vote(Request $request)
     {
         $request->validate([
-            'poll_id' => 'required|integer',
-            'option_id' => 'required|integer'
+            'poll_id' => 'required|integer|exists:polls,id',
+            'option_id' => 'required|integer|exists:poll_options,id'
         ]);
+
+        $isValidOptionForPoll = PollOption::where('id', $request->option_id)
+            ->where('poll_id', $request->poll_id)
+            ->exists();
+
+        if (!$isValidOptionForPoll) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Selected option does not belong to this poll.'
+            ], 422);
+        }
 
         $engine = $this->getVotingEngine();
         $clientIP = $engine->getClientIP();

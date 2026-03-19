@@ -90,6 +90,15 @@ class PollController extends Controller
 
     public function getResults($id)
     {
+        $poll = Poll::find($id);
+
+        if (!$poll) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Poll not found'
+            ], 404);
+        }
+
         $engine = $this->getVotingEngine();
         $results = $engine->getPollResults($id);
         $totalVotes = $engine->getTotalVotes($id);

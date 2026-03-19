@@ -10,7 +10,7 @@ class AuthController extends Controller
     public function showLogin()
     {
         if (Auth::check()) {
-            return redirect('/polls');
+            return redirect(Auth::user()->is_admin ? '/admin' : '/polls');
         }
         return view('auth.login');
     }

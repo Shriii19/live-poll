@@ -75,8 +75,8 @@ class AdminController extends Controller
     public function releaseIP(Request $request)
     {
         $request->validate([
-            'poll_id' => 'required|integer',
-            'ip_address' => 'required|string'
+            'poll_id' => 'required|integer|exists:polls,id',
+            'ip_address' => 'required|ip'
         ]);
 
         $engine = $this->getVotingEngine();

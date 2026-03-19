@@ -24,10 +24,12 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
+            $user = Auth::user();
+
             return response()->json([
                 'success' => true,
-                'redirect' => '/polls',
-                'is_admin' => Auth::user()->is_admin
+                'redirect' => $user->is_admin ? '/admin' : '/polls',
+                'is_admin' => $user->is_admin
             ]);
         }
 

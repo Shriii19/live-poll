@@ -114,12 +114,26 @@ class PollController extends Controller
             'options.*' => 'required|string|max:255'
         ]);
 
+        $question = trim($request->question);
+        $options = collect($request->options)
+            ->map(fn ($option) => trim($option))
+            ->filter(fn ($option) => $option !== '')
+            ->unique()
+            ->values();
+
+        if ($options->count() < 2) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Please provide at least two unique non-empty options.'
+            ], 422);
+        }
+
         $poll = Poll::create([
-            'question' => $request->question,
+            'question' => $question,
             'status' => 'active'
         ]);
 
-        foreach ($request->options as $optionText) {
+        foreach ($options as $optionText) {
             PollOption::create([
                 'poll_id' => $poll->id,
                 'option_text' => $optionText

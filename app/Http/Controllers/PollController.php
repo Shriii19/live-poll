@@ -7,7 +7,6 @@ use App\Models\PollOption;
 use App\CorePHP\VotingEngine;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use PDO;
 
 class PollController extends Controller
 {

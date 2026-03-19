@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Poll;
-use App\Models\Vote;
 use App\Models\VoteHistory;
 use App\CorePHP\VotingEngine;
 use Illuminate\Http\Request;

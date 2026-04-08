@@ -191,6 +191,25 @@
         font-size: 0.75rem;
         letter-spacing: 0.1em;
     }
+
+    .skeleton-item {
+        height: 64px;
+        border-radius: 12px;
+        margin: 0.75rem 1rem;
+        background: linear-gradient(90deg, rgba(203, 213, 225, 0.35), rgba(226, 232, 240, 0.75), rgba(203, 213, 225, 0.35));
+        background-size: 220% 100%;
+        animation: skeletonMove 1.2s linear infinite;
+    }
+
+    [data-bs-theme="dark"] .skeleton-item {
+        background: linear-gradient(90deg, rgba(51, 65, 85, 0.45), rgba(71, 85, 105, 0.7), rgba(51, 65, 85, 0.45));
+        background-size: 220% 100%;
+    }
+
+    @keyframes skeletonMove {
+        from { background-position: 100% 0; }
+        to { background-position: -100% 0; }
+    }
 </style>
 @endsection
 
@@ -280,6 +299,12 @@
 
     // Load polls list
     function loadPolls() {
+        $('#polls-list').html(`
+            <div class="skeleton-item"></div>
+            <div class="skeleton-item"></div>
+            <div class="skeleton-item"></div>
+        `);
+
         $.get('/api/polls', function(response) {
             if (response.success) {
                 renderPollsList(response.polls);
@@ -333,6 +358,12 @@
         $('.poll-list-item').removeClass('active');
         $(`.poll-list-item[data-poll-id="${pollId}"]`).addClass('active');
 
+        $('#poll-detail').show();
+        $('#no-poll-selected').hide();
+        $('#poll-question').text('Loading poll...');
+        $('#poll-options').html('<div class="skeleton-item" style="margin:0 0 0.75rem 0;"></div><div class="skeleton-item" style="margin:0 0 0.75rem 0;"></div>');
+        $('#poll-results').html('<div class="skeleton-item" style="margin:0 0 0.75rem 0;"></div><div class="skeleton-item" style="margin:0;"></div>');
+
         $.get(`/api/polls/${pollId}`, function(response) {
             if (response.success) {
                 renderPollDetail(response.poll, response.has_voted, response.voted_option);
@@ -346,7 +377,7 @@
         
         $('#poll-question').text(poll.question);
         $('#no-poll-selected').hide();
-        $('#poll-detail').show();
+        $('#poll-detail').show().css('animation', 'fadeIn 0.35s ease');
 
         // Render options
         let optionsHtml = '';

@@ -24,7 +24,53 @@
 
     .admin-title i {
         -webkit-text-fill-color: initial;
-        color: #6366f1;
+        color: #ff6a3d;
+    }
+
+    .admin-metrics {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 0.85rem;
+        margin-bottom: 1.25rem;
+    }
+
+    .metric-pill {
+        border-radius: 16px;
+        padding: 0.85rem 1rem;
+        border: 1px solid var(--glass-border);
+        background: rgba(255, 255, 255, 0.7);
+        display: flex;
+        align-items: center;
+        gap: 0.7rem;
+        box-shadow: var(--card-shadow);
+    }
+
+    [data-bs-theme="dark"] .metric-pill {
+        background: rgba(12, 22, 34, 0.74);
+    }
+
+    .metric-pill i {
+        width: 34px;
+        height: 34px;
+        border-radius: 10px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        background: var(--primary-gradient);
+    }
+
+    .metric-pill .value {
+        font-size: 1.05rem;
+        font-weight: 800;
+        line-height: 1.1;
+    }
+
+    .metric-pill .label {
+        color: var(--text-secondary);
+        font-size: 0.74rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
     }
 
     .stat-card {
@@ -118,7 +164,7 @@
     }
 
     .admin-card-header {
-        background: linear-gradient(135deg, #1e293b 0%, #334155 100%) !important;
+        background: linear-gradient(135deg, #18283c 0%, #1f3d57 50%, #216f8c 100%) !important;
     }
 
     .empty-admin-state {
@@ -141,6 +187,27 @@
         font-size: 0.75rem;
         font-weight: 600;
     }
+
+    .status-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: #2ec4b6;
+        display: inline-block;
+        margin-right: 0.35rem;
+        animation: dotPulse 1.4s ease-in-out infinite;
+    }
+
+    @keyframes dotPulse {
+        0%, 100% { transform: scale(1); opacity: 1; }
+        50% { transform: scale(1.45); opacity: 0.65; }
+    }
+
+    @media (max-width: 992px) {
+        .admin-metrics {
+            grid-template-columns: 1fr;
+        }
+    }
 </style>
 @endsection
 
@@ -153,6 +220,30 @@
     <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#createPollModal">
         <i class="fas fa-plus me-2"></i>Create Poll
     </button>
+</div>
+
+<div class="admin-metrics">
+    <div class="metric-pill">
+        <i class="fas fa-list"></i>
+        <div>
+            <div class="value" id="metric-total-polls">0</div>
+            <div class="label">Total Polls</div>
+        </div>
+    </div>
+    <div class="metric-pill">
+        <i class="fas fa-signal"></i>
+        <div>
+            <div class="value" id="metric-active-polls">0</div>
+            <div class="label">Active Polls</div>
+        </div>
+    </div>
+    <div class="metric-pill">
+        <i class="fas fa-users"></i>
+        <div>
+            <div class="value" id="metric-total-votes">0</div>
+            <div class="label">Live Votes</div>
+        </div>
+    </div>
 </div>
 
 <div class="row g-4">
@@ -288,12 +379,19 @@
         }
 
         let html = '';
+        const activePolls = polls.filter((poll) => poll.status === 'active').length;
+        const totalVotes = polls.reduce((sum, poll) => sum + Number(poll.active_votes_count || 0), 0);
+
+        $('#metric-total-polls').text(polls.length);
+        $('#metric-active-polls').text(activePolls);
+        $('#metric-total-votes').text(totalVotes);
+
         polls.forEach((poll, index) => {
             const activeClass = poll.id === adminCurrentPollId ? 'active' : '';
-            const statusBadge = poll.status === 'active' 
-                ? '<span class="badge bg-success">Active</span>' 
+            const statusBadge = poll.status === 'active'
+                ? '<span class="badge bg-success"><span class="status-dot"></span>Active</span>'
                 : '<span class="badge bg-secondary">Inactive</span>';
-            
+
             html += `
                 <div class="poll-admin-item ${activeClass}" 
                      data-poll-id="${poll.id}" 
@@ -307,6 +405,7 @@
                         <span class="poll-vote-count">
                             <i class="fas fa-users me-1"></i>${poll.active_votes_count || 0} votes
                         </span>
+                        <small class="text-muted"><i class="fas fa-shield-alt me-1"></i>IP controls enabled</small>
                     </div>
                 </div>
             `;
@@ -374,8 +473,7 @@
                 : '<span class="text-muted">-</span>';
 
             const historyCount = voter.history.length;
-            const hasMultipleVotes = historyCount > 1;
-            
+
             html += `
                 <tr class="voter-row" style="animation: fadeIn ${0.2 + index * 0.05}s ease;">
                     <td><span class="ip-badge">${voter.ip_address}</span></td>

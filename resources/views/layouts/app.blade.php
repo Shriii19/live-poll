@@ -70,6 +70,13 @@
             border-bottom: 1px solid var(--glass-border);
             box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
             padding: 0.75rem 0;
+            transition: padding 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+        }
+
+        .navbar.scrolled {
+            padding: 0.45rem 0;
+            box-shadow: 0 12px 30px -16px rgba(18, 22, 32, 0.45);
+            background: color-mix(in srgb, var(--glass-bg) 92%, #ffffff 8%) !important;
         }
 
         .navbar-brand {
@@ -105,10 +112,29 @@
             padding: 0.5rem 1rem !important;
             border-radius: 10px;
             transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            left: 0.9rem;
+            right: 0.9rem;
+            bottom: 0.25rem;
+            height: 2px;
+            border-radius: 999px;
+            background: var(--primary-gradient);
+            transform: scaleX(0);
+            transform-origin: center;
+            transition: transform 0.25s ease;
         }
 
         .nav-link:hover {
             background: rgba(255, 106, 61, 0.14);
+        }
+
+        .nav-link:hover::after {
+            transform: scaleX(1);
         }
 
         .card {
@@ -575,6 +601,15 @@
             box-shadow: 0 16px 35px -10px rgba(255, 106, 61, 0.85);
         }
 
+        .theme-toggle.spin {
+            animation: toggleSpin 0.5s ease;
+        }
+
+        @keyframes toggleSpin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(180deg); }
+        }
+
         .live-indicator {
             display: inline-flex;
             align-items: center;
@@ -737,10 +772,25 @@
             html.setAttribute('data-bs-theme', newTheme);
             localStorage.setItem('theme', newTheme);
             updateThemeIcon(newTheme);
+            themeToggle.classList.remove('spin');
+            window.requestAnimationFrame(() => themeToggle.classList.add('spin'));
         });
         
         function updateThemeIcon(theme) {
             themeIcon.className = theme === 'light' ? 'fas fa-moon' : 'fas fa-sun';
+        }
+
+        function handleNavbarScroll() {
+            const navbar = document.querySelector('.navbar');
+            if (!navbar) {
+                return;
+            }
+
+            if (window.scrollY > 12) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
         }
 
         function initRevealAnimations() {
@@ -804,7 +854,11 @@
             }, 4000);
         }
 
-        document.addEventListener('DOMContentLoaded', initRevealAnimations);
+        document.addEventListener('DOMContentLoaded', () => {
+            initRevealAnimations();
+            handleNavbarScroll();
+            window.addEventListener('scroll', handleNavbarScroll, { passive: true });
+        });
     </script>
     @yield('scripts')
 </body>

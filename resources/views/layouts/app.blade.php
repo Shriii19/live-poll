@@ -7,31 +7,31 @@
     <title>@yield('title', 'Live Poll Platform')</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a855f7 100%);
-            --secondary-gradient: linear-gradient(135deg, #f472b6 0%, #ec4899 100%);
-            --success-gradient: linear-gradient(135deg, #10b981 0%, #34d399 100%);
-            --info-gradient: linear-gradient(135deg, #06b6d4 0%, #22d3ee 100%);
-            --warning-gradient: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
-            --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
-            --card-hover-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
-            --glass-bg: rgba(255, 255, 255, 0.85);
-            --glass-border: rgba(255, 255, 255, 0.2);
-            --bg-primary: #f8fafc;
-            --bg-secondary: #e2e8f0;
-            --text-primary: #1e293b;
-            --text-secondary: #64748b;
+            --primary-gradient: linear-gradient(130deg, #ff6a3d 0%, #ff8f3f 45%, #ffd166 100%);
+            --secondary-gradient: linear-gradient(130deg, #00b4d8 0%, #0096c7 100%);
+            --success-gradient: linear-gradient(130deg, #2ec4b6 0%, #29b6a8 100%);
+            --info-gradient: linear-gradient(130deg, #118ab2 0%, #06d6a0 100%);
+            --warning-gradient: linear-gradient(130deg, #f48c06 0%, #ffbe0b 100%);
+            --card-shadow: 0 14px 40px -20px rgba(23, 28, 40, 0.45);
+            --card-hover-shadow: 0 30px 60px -28px rgba(18, 22, 32, 0.5);
+            --glass-bg: rgba(255, 255, 255, 0.82);
+            --glass-border: rgba(255, 255, 255, 0.38);
+            --bg-primary: #fff8f2;
+            --bg-secondary: #ffe8d8;
+            --text-primary: #243447;
+            --text-secondary: #5d6d7e;
         }
 
         [data-bs-theme="dark"] {
-            --glass-bg: rgba(30, 41, 59, 0.85);
-            --glass-border: rgba(255, 255, 255, 0.1);
-            --bg-primary: #0f172a;
-            --bg-secondary: #1e293b;
-            --text-primary: #f1f5f9;
-            --text-secondary: #94a3b8;
+            --glass-bg: rgba(24, 33, 45, 0.86);
+            --glass-border: rgba(255, 255, 255, 0.12);
+            --bg-primary: #0b1420;
+            --bg-secondary: #152030;
+            --text-primary: #f4f7fb;
+            --text-secondary: #a2b2c3;
         }
 
         * {
@@ -41,15 +41,26 @@
         body {
             background: var(--bg-primary);
             background-image: 
-                radial-gradient(at 40% 20%, rgba(99, 102, 241, 0.15) 0px, transparent 50%),
-                radial-gradient(at 80% 0%, rgba(139, 92, 246, 0.1) 0px, transparent 50%),
-                radial-gradient(at 0% 50%, rgba(168, 85, 247, 0.1) 0px, transparent 50%),
-                radial-gradient(at 80% 50%, rgba(236, 72, 153, 0.08) 0px, transparent 50%),
-                radial-gradient(at 0% 100%, rgba(16, 185, 129, 0.1) 0px, transparent 50%);
+                radial-gradient(circle at 12% 18%, rgba(255, 143, 63, 0.2) 0%, transparent 42%),
+                radial-gradient(circle at 78% 8%, rgba(0, 180, 216, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 84% 72%, rgba(46, 196, 182, 0.16) 0%, transparent 45%),
+                radial-gradient(circle at 14% 88%, rgba(255, 209, 102, 0.2) 0%, transparent 42%);
             background-attachment: fixed;
             min-height: 100vh;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             color: var(--text-primary);
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            pointer-events: none;
+            opacity: 0.18;
+            background-image: radial-gradient(rgba(36, 52, 71, 0.25) 0.6px, transparent 0.6px);
+            background-size: 14px 14px;
         }
 
         .navbar {
@@ -62,7 +73,9 @@
         }
 
         .navbar-brand {
-            font-weight: 800;
+            font-family: 'Space Grotesk', sans-serif;
+            letter-spacing: 0.02em;
+            font-weight: 700;
             font-size: 1.5rem;
             background: var(--primary-gradient);
             -webkit-background-clip: text;
@@ -95,12 +108,12 @@
         }
 
         .nav-link:hover {
-            background: rgba(99, 102, 241, 0.1);
+            background: rgba(255, 106, 61, 0.14);
         }
 
         .card {
             border: 1px solid var(--glass-border);
-            border-radius: 20px;
+            border-radius: 22px;
             box-shadow: var(--card-shadow);
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             overflow: hidden;
@@ -110,7 +123,7 @@
         }
 
         .card:hover {
-            transform: translateY(-8px);
+            transform: translateY(-10px);
             box-shadow: var(--card-hover-shadow);
         }
 
@@ -244,7 +257,7 @@
             font-weight: 600;
             border-radius: 12px;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+            box-shadow: 0 10px 24px -10px rgba(255, 106, 61, 0.75);
             position: relative;
             overflow: hidden;
         }
@@ -266,7 +279,7 @@
 
         .btn-primary:hover {
             transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.5);
+            box-shadow: 0 14px 30px -10px rgba(255, 106, 61, 0.85);
             filter: brightness(1.05);
         }
 
@@ -549,7 +562,7 @@
             color: white;
             font-size: 1.25rem;
             cursor: pointer;
-            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
+            box-shadow: 0 12px 30px -10px rgba(255, 106, 61, 0.75);
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             z-index: 1000;
             display: flex;
@@ -559,7 +572,7 @@
 
         .theme-toggle:hover {
             transform: scale(1.1) rotate(15deg);
-            box-shadow: 0 12px 35px rgba(99, 102, 241, 0.5);
+            box-shadow: 0 16px 35px -10px rgba(255, 106, 61, 0.85);
         }
 
         .live-indicator {

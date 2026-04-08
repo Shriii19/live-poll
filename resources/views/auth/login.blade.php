@@ -7,7 +7,7 @@
     <title>Login - Live Poll Platform</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -16,16 +16,16 @@
         }
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             min-height: 100vh;
             display: flex;
-            background: #0f172a;
+            background: #0c1a2b;
             overflow: hidden;
         }
 
         .login-left {
             flex: 1;
-            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a855f7 100%);
+            background: linear-gradient(135deg, #ff6a3d 0%, #ff8f3f 45%, #ffd166 100%);
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -59,6 +59,15 @@
             animation: float 6s ease-in-out infinite reverse;
         }
 
+        .login-left .grid-overlay {
+            position: absolute;
+            inset: 0;
+            background-image: linear-gradient(rgba(255, 255, 255, 0.16) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.16) 1px, transparent 1px);
+            background-size: 34px 34px;
+            opacity: 0.16;
+            pointer-events: none;
+        }
+
         @keyframes float {
             0%, 100% { transform: translate(0, 0) scale(1); }
             50% { transform: translate(30px, 30px) scale(1.05); }
@@ -73,7 +82,9 @@
 
         .login-left-content h1 {
             font-size: 3rem;
-            font-weight: 800;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            letter-spacing: -0.02em;
             margin-bottom: 1rem;
             text-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
         }
@@ -111,12 +122,24 @@
             align-items: center;
             justify-content: center;
             padding: 3rem;
-            background: #1e293b;
+            background: radial-gradient(circle at top, #223951 0%, #152637 60%, #101d2b 100%);
         }
 
         .login-card {
             width: 100%;
             max-width: 400px;
+            animation: loginReveal 0.65s ease;
+        }
+
+        @keyframes loginReveal {
+            from {
+                opacity: 0;
+                transform: translateY(16px) scale(0.98);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
         }
 
         .login-header {
@@ -171,28 +194,29 @@
 
         .form-control:focus {
             background: #334155;
-            border-color: #6366f1;
+            border-color: #ff8f3f;
             color: #f1f5f9;
-            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
+            box-shadow: 0 0 0 4px rgba(255, 143, 63, 0.18);
         }
 
         .input-group:focus-within .input-group-text {
-            border-color: #6366f1;
-            color: #6366f1;
+            border-color: #ff8f3f;
+            color: #ff8f3f;
         }
 
         .btn-login {
             width: 100%;
-            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            background: linear-gradient(130deg, #ff6a3d 0%, #ff8f3f 50%, #ffd166 100%);
             border: none;
             padding: 1rem;
-            font-weight: 600;
+            font-weight: 700;
             font-size: 1rem;
             border-radius: 12px;
             color: white;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             overflow: hidden;
+            box-shadow: 0 12px 28px -14px rgba(255, 143, 63, 0.8);
         }
 
         .btn-login::before {
@@ -212,7 +236,7 @@
 
         .btn-login:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.4);
+            box-shadow: 0 16px 30px -12px rgba(255, 143, 63, 0.9);
         }
 
         .btn-login:active {
@@ -222,14 +246,14 @@
         .demo-accounts {
             margin-top: 2rem;
             padding: 1.25rem;
-            background: rgba(99, 102, 241, 0.1);
+            background: rgba(255, 143, 63, 0.12);
             border-radius: 14px;
-            border: 1px solid rgba(99, 102, 241, 0.2);
+            border: 1px solid rgba(255, 143, 63, 0.28);
         }
 
         .demo-accounts h6 {
-            color: #6366f1;
-            font-weight: 600;
+            color: #ff8f3f;
+            font-weight: 700;
             margin-bottom: 0.75rem;
             font-size: 0.8rem;
             text-transform: uppercase;
@@ -280,7 +304,7 @@
                 width: 100%;
             }
             body {
-                background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a855f7 100%);
+                background: linear-gradient(135deg, #ff6a3d 0%, #ff8f3f 50%, #ffd166 100%);
             }
             .login-right {
                 background: transparent;
@@ -292,10 +316,18 @@
                 box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
             }
         }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation: none !important;
+                transition: none !important;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="login-left">
+        <div class="grid-overlay"></div>
         <div class="login-left-content">
             <div class="poll-icon-large">
                 <i class="fas fa-poll"></i>

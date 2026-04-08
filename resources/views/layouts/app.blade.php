@@ -596,6 +596,33 @@
             animation: livePulse 1.5s infinite;
         }
 
+        .reveal-up {
+            opacity: 0;
+            transform: translateY(18px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+            transition-delay: calc(var(--reveal-order, 0) * 85ms);
+        }
+
+        .reveal-up.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .page-shell {
+            animation: pageEnter 0.55s ease-out;
+        }
+
+        @keyframes pageEnter {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
         @keyframes livePulse {
             0%, 100% { opacity: 1; transform: scale(1); }
             50% { opacity: 0.5; transform: scale(1.5); }
@@ -635,6 +662,20 @@
         .container {
             max-width: 1320px;
         }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
+
+            .reveal-up {
+                opacity: 1;
+                transform: none;
+            }
+        }
     </style>
     @yield('styles')
 </head>
@@ -668,7 +709,7 @@
 
     <div id="alert-container"></div>
 
-    <main class="container py-5">
+    <main class="container py-5 page-shell">
         @yield('content')
     </main>
 
@@ -702,6 +743,39 @@
             themeIcon.className = theme === 'light' ? 'fas fa-moon' : 'fas fa-sun';
         }
 
+        function initRevealAnimations() {
+            const revealTargets = document.querySelectorAll('.card, .poll-list-item, .poll-admin-item, .empty-state, .empty-admin-state');
+            if (!revealTargets.length) {
+                return;
+            }
+
+            const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+            revealTargets.forEach((element, index) => {
+                element.classList.add('reveal-up');
+                element.style.setProperty('--reveal-order', String(index % 8));
+
+                if (reducedMotion) {
+                    element.classList.add('is-visible');
+                }
+            });
+
+            if (reducedMotion) {
+                return;
+            }
+
+            const observer = new IntersectionObserver((entries, localObserver) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                        localObserver.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.15 });
+
+            revealTargets.forEach((element) => observer.observe(element));
+        }
+
         // CSRF token setup for all AJAX requests
         $.ajaxSetup({
             headers: {
@@ -729,6 +803,8 @@
                 $('.alert-floating').alert('close');
             }, 4000);
         }
+
+        document.addEventListener('DOMContentLoaded', initRevealAnimations);
     </script>
     @yield('scripts')
 </body>

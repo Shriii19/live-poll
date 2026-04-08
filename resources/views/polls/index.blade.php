@@ -4,6 +4,45 @@
 
 @section('styles')
 <style>
+    .polls-hero {
+        border-radius: 24px;
+        padding: 1.25rem 1.5rem;
+        margin-bottom: 1.25rem;
+        border: 1px solid var(--glass-border);
+        background: linear-gradient(130deg, rgba(255, 106, 61, 0.14), rgba(0, 180, 216, 0.12));
+        backdrop-filter: blur(16px);
+        box-shadow: var(--card-shadow);
+    }
+
+    .polls-hero h4 {
+        margin-bottom: 0.35rem;
+        font-weight: 800;
+        letter-spacing: -0.02em;
+    }
+
+    .hero-metrics {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.6rem;
+        margin-top: 0.85rem;
+    }
+
+    .hero-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        border-radius: 999px;
+        padding: 0.4rem 0.8rem;
+        font-size: 0.8rem;
+        font-weight: 600;
+        background: rgba(255, 255, 255, 0.72);
+        color: var(--text-primary);
+    }
+
+    [data-bs-theme="dark"] .hero-chip {
+        background: rgba(15, 23, 32, 0.7);
+    }
+
     .poll-card-list {
         max-height: 70vh;
         overflow-y: auto;
@@ -43,6 +82,12 @@
     .poll-list-item.active {
         background: rgba(99, 102, 241, 0.1);
         padding-left: 1.5rem;
+    }
+
+    .poll-list-item .meta-text {
+        font-size: 0.76rem;
+        color: var(--text-secondary);
+        margin-top: 0.2rem;
     }
 
     .poll-icon {
@@ -114,6 +159,16 @@
         -webkit-text-fill-color: transparent;
     }
 
+    .result-percentage.bump {
+        animation: statBump 0.45s ease;
+    }
+
+    @keyframes statBump {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.12); }
+        100% { transform: scale(1); }
+    }
+
     .section-divider {
         display: flex;
         align-items: center;
@@ -140,6 +195,16 @@
 @endsection
 
 @section('content')
+<div class="polls-hero">
+    <h4><i class="fas fa-bolt me-2"></i>Real-Time Audience Pulse</h4>
+    <p class="mb-0 text-muted">Pick a live poll and watch outcomes shift every second.</p>
+    <div class="hero-metrics">
+        <span class="hero-chip"><i class="fas fa-wave-square"></i>Live updates</span>
+        <span class="hero-chip"><i class="fas fa-shield-alt"></i>IP-protected votes</span>
+        <span class="hero-chip"><i class="fas fa-chart-line"></i>Instant percentages</span>
+    </div>
+</div>
+
 <div class="row g-4">
     <div class="col-lg-4">
         <div class="card" style="animation: fadeIn 0.5s ease;">
@@ -211,6 +276,7 @@
     let selectedOptionId = null;
     let hasVoted = false;
     let resultsInterval = null;
+    let previousPercentages = {};
 
     // Load polls list
     function loadPolls() {
@@ -248,6 +314,7 @@
                         </div>
                         <div class="flex-grow-1">
                             <div class="fw-semibold">${poll.question}</div>
+                            <div class="meta-text"><i class="fas fa-fingerprint me-1"></i>One vote per IP</div>
                         </div>
                     </div>
                 </div>
@@ -373,6 +440,8 @@
         let html = '';
         results.forEach((result, index) => {
             const percentage = totalVotes > 0 ? Math.round((result.vote_count / totalVotes) * 100) : 0;
+            const previous = previousPercentages[result.option_text] || 0;
+            const percentageClass = percentage > previous ? 'bump' : '';
             html += `
                 <div class="result-bar-container" style="animation: fadeIn ${0.3 + index * 0.1}s ease; border-radius: 12px; background: rgba(241, 245, 249, 0.8); overflow: hidden;">
                     <div class="result-bar-bg" style="width: ${percentage}%"></div>
@@ -380,11 +449,13 @@
                         <span class="fw-medium">${result.option_text}</span>
                         <span>
                             <span class="text-muted me-2">${result.vote_count} votes</span>
-                            <span class="result-percentage">${percentage}%</span>
+                            <span class="result-percentage ${percentageClass}">${percentage}%</span>
                         </span>
                     </div>
                 </div>
             `;
+
+            previousPercentages[result.option_text] = percentage;
         });
         $('#poll-results').html(html);
     }

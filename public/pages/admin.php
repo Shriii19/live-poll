@@ -189,18 +189,48 @@ $user = getCurrentUser();
                 const statusBadge = poll.status === 'active' 
                     ? '<span class="badge bg-success">Active</span>' 
                     : '<span class="badge bg-secondary">Inactive</span>';
+                const toggleLabel = poll.status === 'active' ? 'Pause' : 'Activate';
+                const toggleClass = poll.status === 'active' ? 'btn-outline-warning' : 'btn-outline-success';
                 html += `
                     <a href="#" class="list-group-item list-group-item-action ${activeClass}" 
                        data-poll-id="${poll.id}" onclick="loadPollVoters(${poll.id}); return false;">
                         <div class="d-flex justify-content-between align-items-center">
                             <span><i class="fas fa-poll-h me-2"></i>${poll.question}</span>
-                            ${statusBadge}
+                            <div class="d-flex align-items-center gap-2">
+                                ${statusBadge}
+                                <button class="btn btn-sm ${toggleClass}" onclick="togglePollStatus(event, ${poll.id}, '${poll.status}')">${toggleLabel}</button>
+                            </div>
                         </div>
                         <small class="text-muted">${poll.active_votes_count || 0} active votes</small>
                     </a>
                 `;
             });
             $list.html(html);
+        }
+
+        function togglePollStatus(event, pollId, currentStatus) {
+            event.preventDefault();
+            event.stopPropagation();
+
+            const nextStatus = currentStatus === 'active' ? 'inactive' : 'active';
+            if (!confirm(`Switch this poll to ${nextStatus}?`)) return;
+
+            $.ajax({
+                url: `/api/polls/${pollId}/toggle`,
+                method: 'POST',
+                success: function(response) {
+                    if (response.success) {
+                        showAlert(`Poll is now ${nextStatus}.`, 'success');
+                        loadAdminPolls();
+                        if (adminCurrentPollId == pollId) {
+                            fetchVoters(pollId);
+                        }
+                    }
+                },
+                error: function(xhr) {
+                    showAlert(xhr.responseJSON?.message || 'We could not update poll status.', 'danger');
+                }
+            });
         }
 
         function loadPollVoters(pollId) {

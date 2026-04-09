@@ -127,10 +127,13 @@ $user = getCurrentUser();
         }
 
         function loadPolls() {
-            $.get('/api/polls.php', function(response) {
+            $.get('/api/polls', function(response) {
                 if (response.success) {
                     renderPollsList(response.polls);
                 }
+            }).fail(function(xhr) {
+                const message = xhr.responseJSON?.message || 'Unable to load polls right now.';
+                showAlert(message, 'danger');
             });
         }
 
@@ -161,11 +164,14 @@ $user = getCurrentUser();
             $('#polls-list .list-group-item').removeClass('active');
             $(`#polls-list [data-poll-id="${pollId}"]`).addClass('active');
 
-            $.get(`/api/polls.php?id=${pollId}&action=get`, function(response) {
+            $.get(`/api/polls/${pollId}`, function(response) {
                 if (response.success) {
                     renderPollDetail(response.poll, response.has_voted, response.voted_option);
                     startResultsPolling();
                 }
+            }).fail(function(xhr) {
+                const message = xhr.responseJSON?.message || 'Unable to load this poll.';
+                showAlert(message, 'danger');
             });
         }
 
@@ -217,7 +223,7 @@ $user = getCurrentUser();
             $btn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin me-2"></i>Voting...');
 
             $.ajax({
-                url: '/api/vote.php',
+                url: '/api/vote',
                 method: 'POST',
                 data: { poll_id: currentPollId, option_id: selectedOptionId },
                 success: function(response) {
@@ -235,10 +241,13 @@ $user = getCurrentUser();
         });
 
         function loadResults(pollId) {
-            $.get(`/api/polls.php?id=${pollId}&action=results`, function(response) {
+            $.get(`/api/polls/${pollId}/results`, function(response) {
                 if (response.success) {
                     renderResults(response.results, response.total_votes);
                 }
+            }).fail(function(xhr) {
+                const message = xhr.responseJSON?.message || 'Unable to refresh live results.';
+                showAlert(message, 'warning');
             });
         }
 

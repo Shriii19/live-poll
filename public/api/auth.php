@@ -37,10 +37,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['user_name'] = $user['name'];
             $_SESSION['user_email'] = $user['email'];
             $_SESSION['is_admin'] = (bool)$user['is_admin'];
+            $redirectPath = $_SESSION['is_admin'] ? '/admin' : '/polls';
             
             jsonResponse([
                 'success' => true,
-                'redirect' => '/polls',
+                'redirect' => $redirectPath,
                 'is_admin' => (bool)$user['is_admin']
             ]);
         } else {

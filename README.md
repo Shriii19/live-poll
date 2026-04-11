@@ -111,7 +111,6 @@ Located at `app/CorePHP/VotingEngine.php`, this handles:
 ### Module 1: Authentication & Poll Display ✅
 - Basic login authentication
 - Poll listing and viewing
-- AJAX navigation without page reload
 
 ### Module 2: IP-Restricted Voting ✅
 - Core PHP VotingEngine
@@ -127,5 +126,4 @@ Located at `app/CorePHP/VotingEngine.php`, this handles:
 ### Module 4: IP Release & Vote Rollback ✅
 - Admin can view all voters per poll
 - Release IP functionality (removes vote)
-- Complete vote history preserved
-- Re-voting allowed after release
+- Complete vote history preserved.
